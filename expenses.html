@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HoldON — Расходы и Аналитика</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primaryBlue: '#0055FF',
+                        accentCoral: '#FF4D6D',
+                        lightBg: '#F8F9FA'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Inter & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Уникальный CSS файл для Расходов -->
+    <link rel="stylesheet" href="expenses.css">
+</head>
+<body class="bg-lightBg text-slate-800 antialiased selection:bg-accentCoral selection:text-white min-h-screen flex flex-col justify-between">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            
+            <a href="index.html" class="flex items-center gap-3 group">
+                <img src="logo.png" alt="HoldON Logo" class="h-10 w-auto object-contain group-hover:scale-105 transition-transform">
+                <span class="text-2xl font-extrabold tracking-tight text-slate-900">Hold<span class="text-accentCoral">ON</span></span>
+            </a>
+
+            <!-- Просторная навигация -->
+            <nav class="hidden md:flex items-center gap-14 font-medium text-slate-600 text-base tracking-wide">
+                <a href="index.html" class="hover:text-primaryBlue transition-colors">Главная</a>
+                <a href="subscription.html" class="hover:text-primaryBlue transition-colors">Подписки</a>
+                <a href="expenses.html" class="text-primaryBlue font-semibold transition-colors pb-1 border-b-2 border-primaryBlue">Расходы</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <a href="subscription.html" class="hidden sm:flex bg-accentCoral hover:bg-accentCoral/90 text-white px-5 py-2.5 rounded-full font-semibold shadow-lg shadow-accentCoral/25 items-center gap-2 transition-all hover:-translate-y-0.5">
+                    <i class="fa-solid fa-sliders text-sm"></i> Управлять
+                </a>
+                <button onclick="toggleMobileMenu()" class="md:hidden text-slate-800 text-2xl focus:outline-none">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-100 px-6 py-4 space-y-3 font-semibold">
+            <a href="index.html" class="block w-full text-left py-2 text-slate-700">Главная</a>
+            <a href="subscription.html" class="block w-full text-left py-2 text-slate-700">Подписки</a>
+            <a href="expenses.html" class="block w-full text-left py-2 text-primaryBlue">Расходы</a>
+        </div>
+    </header>
+
+    <!-- Expenses Content Section -->
+    <main class="flex-grow">
+        <section class="py-12 bg-slate-50/50 min-h-[85vh]">
+            <div class="max-w-7xl mx-auto px-6">
+                
+                <div class="mb-8">
+                    <div class="inline-flex items-center gap-2 bg-pink-100 text-accentCoral px-4 py-1.5 rounded-full text-sm font-semibold mb-3">
+                        <i class="fa-solid fa-chart-pie"></i> Финансовая аналитика
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">Расходы и Статистика</h2>
+                    <p class="text-slate-600 mt-1">Детальный разбор трат по категориям, рекомендации и история списаний.</p>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-blue-50 text-primaryBlue rounded-2xl flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">Текущий</span>
+                        </div>
+                        <span class="text-slate-400 text-xs font-semibold uppercase">Месячный бюджет</span>
+                        <h3 id="exp-monthly-total" class="text-2xl font-extrabold text-slate-900 mt-1">₸ 0</h3>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-pink-50 text-accentCoral rounded-2xl flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-calendar-days"></i>
+                            </div>
+                            <span class="text-xs font-bold text-primaryBlue bg-blue-50 px-2.5 py-1 rounded-full">Прогноз</span>
+                        </div>
+                        <span class="text-slate-400 text-xs font-semibold uppercase">Годовые траты</span>
+                        <h3 id="exp-yearly-total" class="text-2xl font-extrabold text-slate-900 mt-1">₸ 0</h3>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-piggy-bank"></i>
+                            </div>
+                            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">Экономия</span>
+                        </div>
+                        <span class="text-slate-400 text-xs font-semibold uppercase">Сэкономлено с HoldON</span>
+                        <h3 class="text-2xl font-extrabold text-slate-900 mt-1">₸ 24,500</h3>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-layer-group"></i>
+                            </div>
+                            <span class="text-xs font-bold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-full">Категории</span>
+                        </div>
+                        <span class="text-slate-400 text-xs font-semibold uppercase">Активных групп</span>
+                        <h3 id="exp-category-count" class="text-2xl font-extrabold text-slate-900 mt-1">0</h3>
+                    </div>
+                </div>
+
+           <!-- Breakdown & Mascot Tip -->
+<div class="grid lg:grid-cols-2 gap-8 mb-12">
+    
+    <!-- Левый блок (категории) -->
+    <div class="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+        <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-chart-bar text-primaryBlue"></i> Распределение по категориям
+        </h3>
+        <div id="categories-progress-container" class="space-y-5"></div>
+    </div>
+
+    <!-- Правый блок совета с идеальным кругом под маскота -->
+    <div class="bg-gradient-to-br from-primaryBlue to-blue-700 p-8 rounded-3xl text-white shadow-lg flex flex-col justify-between relative overflow-hidden min-h-[320px]">
+        <!-- Декоративное свечение сзади -->
+        <div class="absolute -right-10 -bottom-10 w-56 h-56 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+
+        <!-- Белый круг с обрезкой overflow-hidden (чтобы квадратный фон картинки не вылезал) -->
+        <div class="absolute right-6 bottom-6 w-36 h-36 bg-white rounded-full p-2 shadow-2xl border-4 border-white/20 flex items-center justify-center overflow-hidden pointer-events-none hidden sm:flex">
+            <img src="mascot.png" alt="HoldON Mascot" class="w-full h-full object-contain">
+        </div>
+
+        <div class="space-y-4 relative z-10 max-w-[60%]">
+            <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/20 text-xs font-semibold">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Помощник HoldON
+            </div>
+            <h3 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Совет от крабика</h3>
+            <p id="crab-tip-text" class="text-blue-100 leading-relaxed text-sm sm:text-base">
+                Анализируем ваши подписки...
+            </p>
+        </div>
+
+        <div class="pt-6 relative z-10">
+            <a href="subscription.html" class="inline-block bg-white text-slate-900 hover:bg-blue-50 px-6 py-3 rounded-2xl font-bold shadow-lg shadow-black/10 transition-all hover:-translate-y-0.5">
+                Управлять подписками
+            </a>
+        </div>
+    </div>
+
+</div>
+
+                <!-- History Table -->
+                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-8">
+                    <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-primaryBlue"></i> История списаний
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-slate-100 text-slate-400 text-xs font-bold uppercase tracking-wider bg-slate-50/50">
+                                    <th class="py-3 px-4">Сервис</th>
+                                    <th class="py-3 px-4">Категория</th>
+                                    <th class="py-3 px-4">Дата</th>
+                                    <th class="py-3 px-4 text-right">Сумма</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transaction-history-body" class="divide-y divide-slate-100 text-slate-700 text-sm"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-8 mt-20">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <img src="logo.png" alt="HoldON Logo" class="h-8 w-auto object-contain">
+                <span class="text-xl font-bold tracking-tight text-slate-900">Hold<span class="text-accentCoral">ON</span></span>
+            </div>
+            <p class="text-sm text-slate-500">&copy; 2026 HoldON App. Все права защищены.</p>
+            <div class="flex items-center gap-6 text-slate-600">
+                <a href="#" class="hover:text-primaryBlue transition-colors"><i class="fa-brands fa-telegram text-lg"></i></a>
+                <a href="#" class="hover:text-primaryBlue transition-colors"><i class="fa-brands fa-instagram text-lg"></i></a>
+                <a href="#" class="hover:text-primaryBlue transition-colors"><i class="fa-brands fa-vk text-lg"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS Logic linking LocalStorage from Subscriptions -->
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function renderExpenses() {
+            const subscriptions = JSON.parse(localStorage.getItem('holdon_subscriptions')) || [
+                { id: 1, name: 'Netflix Premium', category: 'Streaming', price: 4500, date: '2026-04-15', period: 'monthly', active: true },
+                { id: 2, name: 'Spotify Family', category: 'Music', price: 2200, date: '2026-04-18', period: 'monthly', active: true },
+                { id: 3, name: 'iCloud 200GB', category: 'Cloud', price: 1490, date: '2026-04-22', period: 'monthly', active: true },
+                { id: 4, name: 'YouTube Premium', category: 'Streaming', price: 2800, date: '2026-04-28', period: 'monthly', active: true }
+            ];
+
+            let totalMonthly = 0;
+            let activeCount = 0;
+            const categoryTotals = { Streaming: 0, Music: 0, Cloud: 0, Utilities: 0, Other: 0 };
+            const categoryLabels = { Streaming: 'Видео & Кино', Music: 'Музыка', Cloud: 'Облако и Софт', Utilities: 'Утилиты', Other: 'Другое' };
+            const categoryColors = { Streaming: 'bg-primaryBlue', Music: 'bg-accentCoral', Cloud: 'bg-amber-500', Utilities: 'bg-emerald-500', Other: 'bg-purple-500' };
+
+            subscriptions.forEach(sub => {
+                if (sub.active) {
+                    const monthlyPrice = sub.period === 'yearly' ? sub.price / 12 : sub.price;
+                    totalMonthly += monthlyPrice;
+                    activeCount++;
+                    if (categoryTotals[sub.category] !== undefined) {
+                        categoryTotals[sub.category] += monthlyPrice;
+                    } else {
+                        categoryTotals['Other'] += monthlyPrice;
+                    }
+                }
+            });
+
+            document.getElementById('exp-monthly-total').innerText = `₸ ${Math.round(totalMonthly).toLocaleString()}`;
+            document.getElementById('exp-yearly-total').innerText = `₸ ${Math.round(totalMonthly * 12).toLocaleString()}`;
+            
+            let activeCatCount = Object.values(categoryTotals).filter(val => val > 0).length;
+            document.getElementById('exp-category-count').innerText = activeCatCount;
+
+            // Render Category Progress Bars
+            const progressContainer = document.getElementById('categories-progress-container');
+            progressContainer.innerHTML = '';
+
+            Object.keys(categoryTotals).forEach(catKey => {
+                const amount = categoryTotals[catKey];
+                const percentage = totalMonthly > 0 ? Math.round((amount / totalMonthly) * 100) : 0;
+                
+                const div = document.createElement('div');
+                div.className = 'space-y-1.5';
+                div.innerHTML = `
+                    <div class="flex justify-between text-sm font-semibold">
+                        <span class="text-slate-700">${categoryLabels[catKey]}</span>
+                        <span class="text-slate-900">₸ ${Math.round(amount).toLocaleString()} <span class="text-slate-400 font-normal">(${percentage}%)</span></span>
+                    </div>
+                    <div class="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                        <div class="${categoryColors[catKey]} h-full rounded-full transition-all duration-500" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+                progressContainer.appendChild(div);
+            });
+
+            // Tip
+            const crabTip = document.getElementById('crab-tip-text');
+            if (activeCount === 0) {
+                crabTip.innerText = "У вас пока нет активных подписок. Добавьте первую, чтобы я помог следить за бюджетом!";
+            } else if (categoryTotals['Streaming'] > (totalMonthly * 0.5)) {
+                crabTip.innerText = "Видео-сервисы составляют больше половины ваших трат. Проверьте, всеми ли вы пользуетесь в этом месяце!";
+            } else {
+                crabTip.innerText = `Отличная работа! Ваши расходы под контролем. Активных подписок: ${activeCount}. Экономия работает на вас.`;
+            }
+
+            // History Table
+            const historyBody = document.getElementById('transaction-history-body');
+            historyBody.innerHTML = '';
+            
+            subscriptions.filter(s => s.active).forEach(sub => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50/50 transition-colors';
+                tr.innerHTML = `
+                    <td class="py-3 px-4 font-semibold text-slate-900">${sub.name}</td>
+                    <td class="py-3 px-4"><span class="bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full text-xs font-semibold">${categoryLabels[sub.category] || sub.category}</span></td>
+                    <td class="py-3 px-4 text-slate-500">${sub.date}</td>
+                    <td class="py-3 px-4 text-right font-extrabold text-slate-900">- ₸ ${sub.price.toLocaleString()}</td>
+                `;
+                historyBody.appendChild(tr);
+            });
+        }
+
+        window.onload = renderExpenses;
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

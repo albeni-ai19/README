@@ -1,0 +1,17 @@
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Эффекты и кастомные стили для подписок */
+.sub-table-row {
+    transition: all 0.2s ease-in-out;
+}
+
+.sub-table-row:hover {
+    background-color: rgba(248, 250, 252, 0.8);
+}
+
+/* Модальное окно */
+#add-modal {
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
