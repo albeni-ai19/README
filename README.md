@@ -27,4 +27,4 @@
 
 1. Клонируй репозиторий:
    ```bash
-  git clone https://github.com/albeni-ai19/имя_репозитория.git
+  git clone https://github.com/albeni-ai19/README.git
